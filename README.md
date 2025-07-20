@@ -1,1 +1,1 @@
-#StudyCo App
+# StudyCo App
