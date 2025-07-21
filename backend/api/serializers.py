@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import StudySpot, Criteria, SpotCriteria
 
 class StudySpotSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=50)
     latitude = serializers.FloatField()
     longitude = serializers.FloatField()
@@ -10,6 +11,7 @@ class StudySpotSerializer(serializers.Serializer):
         return StudySpot.objects.create(**validated_data)
     
 class CriteriaSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     attribute = serializers.CharField(max_length=50)
     
     def create(self, validated_data):
