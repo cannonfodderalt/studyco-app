@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'studyco.urls'
 
 TEMPLATES = [
     {
@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'studyco.wsgi.application'
 
 
 # Database
@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cannonfodderalt',
+        'NAME': 'studyco',
         'USER': 'nliou',
-        'PASSWORD': 'mypassword',
+        'PASSWORD': 'oo4si1h%',
         'HOST': 'localhost',
         'PORT': '5432',
     }
