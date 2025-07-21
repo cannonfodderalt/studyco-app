@@ -20,4 +20,4 @@ class SpotCriteria(models.Model):
     criteria = models.ForeignKey(Criteria, on_delete=models.CASCADE)
     
     def __str__(self):
-        return str(self.studySpot) + " " + str(self.criteria)
+        return str(self.studySpot) + " + " + str(self.criteria)
