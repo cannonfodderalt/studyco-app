@@ -1,13 +1,16 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
+router = DefaultRouter()
+router.register(r'spots', views.StudySpotViewSet, basename='spot')
+router.register(r'criteria', views.CriteriaViewSet, basename='criteria')
+router.register(r'spotcriteria', views.SpotCriteriaViewSet, basename='spotcriteria')
+
 urlpatterns = [
-    path('spots/', views.listSpots.as_view(), name='list_spots'),
-    path('criteria/', views.listCriteria.as_view(), name='list_criteria'),
-    path('spot-criteria/', views.listSpotCriteria.as_view(), name='list_spot_criteria'),
-    path('criteria-in-spot/', views.listCriteriaInSpot.as_view(), name='list_criteria_in_spot'),
-    path('spots-with-criteria/', views.listSpotsWithCriteria.as_view(), name='list_spots_with_criteria'),
-    path('add-spot/', views.addSpot.as_view(), name='add_spot'),
-    path('add-criteria/', views.addCriteria.as_view(), name='add_criteria'),
-    path('add-spot-criteria/', views.addSpotCriteria.as_view(), name='add_spot_criteria'),
+    path('', include(router.urls)),
+
+    # Custom endpoints not covered by ViewSets
+    path('spots/with-criteria/', views.SpotsWithCriteriaView.as_view(), name='spots-with-criteria'),
+    path('criteria/with-spots/', views.CriteriaWithSpotsView.as_view(), name='criteria-with-spots'),
 ]
