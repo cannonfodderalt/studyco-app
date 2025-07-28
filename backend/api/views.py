@@ -25,6 +25,7 @@ class CriteriaViewSet(viewsets.ModelViewSet):
 # SpotCriteria ViewSet
 class SpotCriteriaViewSet(viewsets.ModelViewSet):
     queryset = SpotCriteria.objects.all()
+    serializer_class = serializers.SpotCriteriaSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['studySpot', 'criteria']
 
