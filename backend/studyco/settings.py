@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-h1s9r@!r12xyu+6509_)!yk1r=*wa*g(i-+5vzx*$%+@asigqs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "192.168.68.161"
+]
 
 
 # Application definition
@@ -130,7 +134,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer', 
+    ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ]
 }
+
+CORS_ALLOW_ALL_ORIGINS = True # Allow all origins for development purposes; remove when not in development
+#Use CORS_ALLOWED_ORIGINS = ["https://yourdomain.com"] later
