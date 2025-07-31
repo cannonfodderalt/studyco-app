@@ -6,8 +6,8 @@ export default function HomeScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: '#BFDBFE' }]}>
-      <Text style={styles.greeting}>{"Hi"}</Text>
-      <Text style={styles.subtext}>This is your randomized Home Screen 🎲</Text>
+      <Text style={styles.greeting}>Hi</Text>
+      <Text style={styles.subtext}>This is a home screen!</Text>
     </View>
   );
 }
