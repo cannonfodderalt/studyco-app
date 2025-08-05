@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,15 +85,17 @@ WSGI_APPLICATION = 'studyco.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'studyco',
-        'USER': 'nliou',
-        'PASSWORD': 'oo4si1h%',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'mssql',
+        'NAME': 'StudyCoDB',
+        'USER': 'nliou@studycoserver2',
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': 'studycoserver2.database.windows.net',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 18 for SQL Server',
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
