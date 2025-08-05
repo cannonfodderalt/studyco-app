@@ -87,9 +87,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'StudyCoDB',
-        'USER': 'nliou@studycoserver2',
+        'USER': os.environ.get('DATABASE_USER'),
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': 'studycoserver2.database.windows.net',
+        'HOST': os.environ.get('DATABASE_HOST'),
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 18 for SQL Server',
