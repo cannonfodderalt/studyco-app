@@ -13,9 +13,9 @@ export default function RootLayout() {
     // Async font loading only occurs in development.
     return null;
   }
-
+ // DarkTheme later?? in themeprovider
   return (
-    <ThemeProvider value={DefaultTheme}> {/* DarkTheme later?? */}
+    <ThemeProvider value={DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
