@@ -2,9 +2,17 @@ from rest_framework import serializers
 from .models import StudySpot, Criteria, SpotCriteria
 
 class StudySpotSerializer(serializers.ModelSerializer):
+    criteria = serializers.SerializerMethodField()
+
     class Meta:
         model = StudySpot
-        fields = '__all__'
+        fields = ['id', 'name', 'latitude', 'longitude', 'criteria']
+
+    def get_criteria(self, spot):
+        criteria = Criteria.objects.filter(
+            id__in=SpotCriteria.objects.filter(studySpot=spot).values_list('criteria', flat=True)
+        )
+        return CriteriaSerializer(criteria, many=True).data
     
 class CriteriaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,8 +27,3 @@ class SpotCriteriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpotCriteria
         fields = '__all__'
-        
-class SpotCriteriaCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SpotCriteria
-        fields = ['studySpot', 'criteria']
