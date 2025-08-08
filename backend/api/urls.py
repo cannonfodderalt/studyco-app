@@ -9,8 +9,4 @@ router.register(r'spotcriteria', views.SpotCriteriaViewSet, basename='spotcriter
 
 urlpatterns = [
     path('', include(router.urls)),
-
-    # Custom endpoints not covered by ViewSets
-    path('spots/with-criteria/', views.SpotsWithCriteriaView.as_view(), name='spots-with-criteria'),
-    path('criteria/with-spots/', views.CriteriaWithSpotsView.as_view(), name='criteria-with-spots'),
 ]
