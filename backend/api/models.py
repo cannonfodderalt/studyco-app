@@ -5,6 +5,7 @@ class StudySpot(models.Model):
     name = models.CharField(max_length=50)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    image_url = models.CharField(max_length=100, default='spotimages/pikachu.jpg')
     
     def __str__(self):
         return self.name
