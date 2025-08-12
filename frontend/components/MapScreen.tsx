@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { View, Keyboard } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
-import SearchBar from "./SearchBar";
 import SearchSuggestions from "./SearchSuggestions";
+import SearchBarWithFilter from "./SearchFilter";
 
 interface Spot {
   id: number;
@@ -13,8 +13,8 @@ interface Spot {
 }
 
 interface Criteria {
-    id: number;
-    attribute: string;
+  id: number;
+  attribute: string;
 }
 
 interface MapScreenProps {
@@ -25,22 +25,48 @@ interface MapScreenProps {
 export default function MapScreen({ spots, criteria }: MapScreenProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredSpots, setFilteredSpots] = useState<Spot[]>(spots);
-  const [criteriaList, setCriteria] = useState<Criteria[]>(criteria);
+  const [filteredCriteria, setFilteredCriteria] = useState<Criteria[]>(criteria);
 
   const mapRef = useRef<MapView>(null);
 
-  const handleSearchChange = (text: string) => {
-    setSearchQuery(text);
+  // Filtering function that considers both search and selected criteria
+  const filterSpots = (query: string, selectedCriteria: Criteria[]) => {
+    let filtered = spots;
 
-    if (text.trim() === "") {
-      setFilteredSpots(spots);
-      return;
+    // Filter by name search
+    if (query.trim() !== "") {
+      filtered = filtered.filter((spot) =>
+        spot.name.toLowerCase().includes(query.toLowerCase())
+      );
     }
 
-    const filtered = spots.filter((spot) =>
-      spot.name.toLowerCase().includes(text.toLowerCase())
-    );
+    // Filter by criteria
+    if (selectedCriteria.length > 0) {
+      const selectedIds = selectedCriteria.map((c) => c.id);
+      filtered = filtered.filter((spot) =>
+        selectedIds.every(id => spot.criteria.some(c => c.id === id))
+      );
+    }
+
+    return filtered;
+  };
+
+  // Call filterSpots when searchQuery or filteredCriteria changes
+  useEffect(() => {
+    const filtered = filterSpots(searchQuery, filteredCriteria);
     setFilteredSpots(filtered);
+  }, [searchQuery, filteredCriteria]);
+
+  const handleSearchChange = (text: string) => {
+    setSearchQuery(text);
+  };
+
+  const toggleTag = (id: number) => {
+    setFilteredCriteria((prev) =>
+      prev.some((t) => t.id === id)
+        ? prev.filter((t) => t.id !== id)
+        : [...prev, criteria.find((c) => c.id === id)!]
+    );
   };
 
   const handleSelectSuggestion = (spot: Spot) => {
@@ -60,10 +86,16 @@ export default function MapScreen({ spots, criteria }: MapScreenProps) {
 
   return (
     <View style={{ flex: 1 }}>
-      <SearchBar value={searchQuery} onChangeText={handleSearchChange} />
+      <SearchBarWithFilter
+        value={searchQuery}
+        onChangeText={handleSearchChange}
+        criteria={criteria}
+        selectedCriteria={filteredCriteria.map((c) => c.id)}
+        onToggleCriteria={toggleTag}
+      />
       <SearchSuggestions
         suggestions={
-          searchQuery.trim() === "" || filteredSpots.length === 1
+          searchQuery.trim() === "" || filteredSpots.length === 0
             ? []
             : filteredSpots
         }
