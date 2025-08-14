@@ -3,19 +3,8 @@ import { View, Keyboard } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
 import SearchSuggestions from "./SearchSuggestions";
 import SearchBarWithFilter from "./SearchFilter";
-
-interface Spot {
-  id: number;
-  latitude: number;
-  longitude: number;
-  name: string;
-  criteria: Criteria[];
-}
-
-interface Criteria {
-  id: number;
-  attribute: string;
-}
+import SpotBottomSheet, { SpotBottomSheetRef } from "./SpotBottomSheet";
+import { Spot, Criteria } from "@/types";
 
 interface MapScreenProps {
   spots: Spot[];
@@ -25,22 +14,20 @@ interface MapScreenProps {
 export default function MapScreen({ spots, criteria }: MapScreenProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredSpots, setFilteredSpots] = useState<Spot[]>(spots);
-  const [filteredCriteria, setFilteredCriteria] = useState<Criteria[]>(criteria);
+  const [filteredCriteria, setFilteredCriteria] = useState<Criteria[]>([]);
 
   const mapRef = useRef<MapView>(null);
+  const sheetRef = useRef<SpotBottomSheetRef>(null);
 
-  // Filtering function that considers both search and selected criteria
   const filterSpots = (query: string, selectedCriteria: Criteria[]) => {
     let filtered = spots;
 
-    // Filter by name search
     if (query.trim() !== "") {
       filtered = filtered.filter((spot) =>
         spot.name.toLowerCase().includes(query.toLowerCase())
       );
     }
 
-    // Filter by criteria
     if (selectedCriteria.length > 0) {
       const selectedIds = selectedCriteria.map((c) => c.id);
       filtered = filtered.filter((spot) =>
@@ -51,15 +38,12 @@ export default function MapScreen({ spots, criteria }: MapScreenProps) {
     return filtered;
   };
 
-  // Call filterSpots when searchQuery or filteredCriteria changes
   useEffect(() => {
     const filtered = filterSpots(searchQuery, filteredCriteria);
     setFilteredSpots(filtered);
   }, [searchQuery, filteredCriteria]);
 
-  const handleSearchChange = (text: string) => {
-    setSearchQuery(text);
-  };
+  const handleSearchChange = (text: string) => setSearchQuery(text);
 
   const toggleTag = (id: number) => {
     setFilteredCriteria((prev) =>
@@ -119,9 +103,14 @@ export default function MapScreen({ spots, criteria }: MapScreenProps) {
               longitude: spot.longitude,
             }}
             title={spot.name}
+            onPress={() => {
+              sheetRef.current?.open(spot);
+            }}
           />
         ))}
       </MapView>
+
+      <SpotBottomSheet ref={sheetRef} />
     </View>
   );
 }

@@ -90,11 +90,12 @@ DATABASES = {
         'USER': os.environ.get('DATABASE_USER'),
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
         'HOST': os.environ.get('DATABASE_HOST'),
-        'PORT': '',
+        'PORT': '1433',
         'OPTIONS': {
             'driver': 'ODBC Driver 18 for SQL Server',
             'Encrypt': 'yes',
             'TrustServerCertificate': 'no',
+            'Connection Timeout': 30,
         },
     }
 }
