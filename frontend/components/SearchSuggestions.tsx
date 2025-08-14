@@ -6,19 +6,8 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
+import { Spot } from "@/types";
 
-interface Spot {
-    id: number;
-    latitude: number;
-    longitude: number;
-    name: string;
-    criteria: Criteria[];
-}
-
-interface Criteria {
-    id: number;
-    attribute: string;
-}
 
 interface SuggestionsListProps {
   suggestions: Spot[];

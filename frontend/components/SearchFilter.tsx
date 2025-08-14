@@ -9,12 +9,9 @@ import {
   Platform,
 } from "react-native";
 import Modal from "react-native-modal";
-import { IconSymbol } from "@/components/ui/IconSymbol"; // adjust path
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { Criteria } from "@/types";
 
-interface Criteria {
-  id: number;
-  attribute: string;
-}
 
 interface SearchBarWithFilterProps {
   value: string;
