@@ -5,7 +5,6 @@ import {
   Image,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
 } from "react-native";
 import Modal from "react-native-modal";
 import { Spot } from "@/types";
@@ -34,21 +33,28 @@ const SpotBottomSheet = forwardRef<SpotBottomSheetRef>((_, ref) => {
     <Modal
       isVisible={isVisible}
       onBackdropPress={() => setIsVisible(false)}
+      swipeDirection="down"
+      onSwipeComplete={() => setIsVisible(false)}
       style={styles.modal}
     >
-      <View style={styles.container}>
+      <View style={styles.sheet}>
+        {/* Drag handle */}
+        <View style={styles.dragHandle} />
+
         {spot ? (
           <>
             <Text style={styles.title}>{spot.name}</Text>
+
             {spot.image_url ? (
               <Image
-                source={{ uri: spot.image_url }}
+                source={{ uri: spot.image_url[0] }}
                 style={styles.image}
                 resizeMode="cover"
               />
             ) : (
-              <Text>No image available</Text>
+              <Text style={styles.noImage}>No image available</Text>
             )}
+
             <Text style={styles.subtitle}>Criteria:</Text>
             <FlatList
               data={spot.criteria}
@@ -56,15 +62,12 @@ const SpotBottomSheet = forwardRef<SpotBottomSheetRef>((_, ref) => {
               renderItem={({ item }) => (
                 <Text style={styles.criteria}>{item.attribute}</Text>
               )}
+              contentContainerStyle={{ paddingBottom: 16 }}
             />
           </>
         ) : (
-          <Text>No spot selected</Text>
+          <Text style={styles.noSpot}>No spot selected</Text>
         )}
-
-        <TouchableOpacity onPress={() => setIsVisible(false)}>
-          <Text style={styles.close}>Close</Text>
-        </TouchableOpacity>
       </View>
     </Modal>
   );
@@ -75,24 +78,29 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     margin: 0,
   },
-  container: {
+  sheet: {
     backgroundColor: "white",
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 32,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     maxHeight: "60%",
   },
+  dragHandle: {
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#ccc",
+    alignSelf: "center",
+    marginBottom: 12,
+  },
   title: { fontSize: 20, fontWeight: "bold", marginBottom: 8 },
-  subtitle: { fontSize: 16, fontWeight: "600", marginTop: 12 },
+  subtitle: { fontSize: 16, fontWeight: "600", marginTop: 12, marginBottom: 6 },
   image: { width: "100%", height: 150, borderRadius: 8, marginBottom: 8 },
   criteria: { fontSize: 14, marginVertical: 2 },
-  close: {
-    textAlign: "center",
-    padding: 10,
-    color: "blue",
-    marginTop: 10,
-  },
-  
+  noSpot: { textAlign: "center", color: "#666", marginVertical: 20 },
+  noImage: { color: "#999", marginBottom: 8 },
 });
 
 export default SpotBottomSheet;

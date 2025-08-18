@@ -15,6 +15,6 @@ def generate_private_image_url(blob_name):
         account_key=ACCOUNT_KEY,
         permission=BlobSasPermissions(read=True),
         start=now - timedelta(minutes=5),  # allow 5 min clock skew
-        expiry=now + timedelta(hours=1),   # expires in 1 hour
+        expiry=now + timedelta(hours=24),   # expires in 1 hour
     )
     return f"https://{ACCOUNT_NAME}.blob.core.windows.net/{CONTAINER_NAME}/{blob_name}?{sas_token}"

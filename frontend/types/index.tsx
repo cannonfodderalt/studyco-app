@@ -3,7 +3,7 @@ export interface Spot {
     latitude: number;
     longitude: number;
     name: string;
-    image_url: string;
+    image_url: string[];
     criteria: Criteria[];
 }
 

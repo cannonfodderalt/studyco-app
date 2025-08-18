@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import StudySpot, Criteria, SpotCriteria
-from .utils import generate_private_image_url
 
 class StudySpotSerializer(serializers.ModelSerializer):
     criteria = serializers.SerializerMethodField()
@@ -17,7 +16,7 @@ class StudySpotSerializer(serializers.ModelSerializer):
         return CriteriaSerializer(criteria, many=True).data
     
     def get_image_url(self, spot):
-        return generate_private_image_url(spot.image_url) if spot.image_url else None
+        return spot.get_image_urls()
     
 class CriteriaSerializer(serializers.ModelSerializer):
     class Meta:

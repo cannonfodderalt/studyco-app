@@ -21,22 +21,35 @@ export default function MapScreen({ spots, criteria }: MapScreenProps) {
 
   const filterSpots = (query: string, selectedCriteria: Criteria[]) => {
     let filtered = spots;
-
+  
     if (query.trim() !== "") {
+      const lowerQuery = query.toLowerCase();
       filtered = filtered.filter((spot) =>
-        spot.name.toLowerCase().includes(query.toLowerCase())
+        spot.name.toLowerCase().includes(lowerQuery)
       );
+  
+      filtered.sort((a, b) => {
+        const aName = a.name.toLowerCase();
+        const bName = b.name.toLowerCase();
+        const aStarts = aName.startsWith(lowerQuery) ? 0 : 1;
+        const bStarts = bName.startsWith(lowerQuery) ? 0 : 1;
+  
+        if (aStarts !== bStarts) return aStarts - bStarts;
+  
+        return aName.localeCompare(bName);
+      });
     }
-
+  
     if (selectedCriteria.length > 0) {
       const selectedIds = selectedCriteria.map((c) => c.id);
       filtered = filtered.filter((spot) =>
         selectedIds.every(id => spot.criteria.some(c => c.id === id))
       );
     }
-
+  
     return filtered;
   };
+  
 
   useEffect(() => {
     const filtered = filterSpots(searchQuery, filteredCriteria);
@@ -86,6 +99,8 @@ export default function MapScreen({ spots, criteria }: MapScreenProps) {
         onSelect={handleSelectSuggestion}
       />
       <MapView
+        provider="google"
+        showsUserLocation={true}
         ref={mapRef}
         style={{ flex: 1 }}
         initialRegion={{
@@ -102,7 +117,6 @@ export default function MapScreen({ spots, criteria }: MapScreenProps) {
               latitude: spot.latitude,
               longitude: spot.longitude,
             }}
-            title={spot.name}
             onPress={() => {
               sheetRef.current?.open(spot);
             }}
